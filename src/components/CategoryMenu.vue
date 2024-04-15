@@ -61,7 +61,6 @@ export default {
   width: 130px;
   height: 100vh;
   background-color: @bg-menu;
-
   display: flex;
   align-items: center;
   ul {
@@ -75,6 +74,7 @@ export default {
       align-items: center;
       justify-content: center;
       height: 102px;
+      cursor: pointer;
 
       p{
         margin-bottom: 0;

@@ -36,14 +36,18 @@ export default {
         { label: "Bebidas", icon: "Drinks", id: "drinks" },
         { label: "Sobremesas", icon: "Deserts", id: "deserts" },
         { label: "Combos", icon: "Combo", id: "combo" },
-        { label: "Burguers", icon: "Burguer", id: "burguer" },
+        { label: "Burguers", icon: "Burguer", id: "burguers" },
       ],
-      selectedCategory: "pizza",
+      selectedCategory: '',
     };
+  },
+  mounted(){
+    this.onCategoryClick('pizza')
   },
   methods: {
     onCategoryClick(id) {
       this.selectedCategory = id;
+      this.$store.dispatch('ChangeCategory', id)
     },
     isActive(id){
         return this.selectedCategory === id;

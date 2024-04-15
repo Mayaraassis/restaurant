@@ -52,11 +52,13 @@ export default {
 <style scoped lang="less">
 .items-list {
   margin: 50px;
-  display: flex;
   width: 100%;
+  display: flex;
+  flex-wrap: wrap;
   @media @smartphones {
     flex-wrap: wrap;
-    margin: 20px;
+    margin: 0;
+    padding: 20px;
   }
 }
 </style>

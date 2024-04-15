@@ -1,5 +1,5 @@
 <template>
-  <div class="item">
+  <div class="item" @click="addToCart">
     <div class="container">
       <div class="item--tag" v-if="item.offer">Oferta</div>
       <img class="item--img" :src="imagePath" />
@@ -26,11 +26,13 @@ export default {
     item: {},
   },
   computed: {
-    selectedCategory() {
-        return this.$store.state.selectedCategory;
-    },
     imagePath(){
-      return require(`@/assets/images/${this.selectedCategory}/${this.item.id}.png`)
+      return require(`@/assets/images/${this.item.id}.png`)
+    }
+  },
+  methods: {
+    addToCart(){
+      this.$store.dispatch('addToCart', this.item);
     }
   }
 };
@@ -45,6 +47,8 @@ export default {
   position: relative;
   margin: 20px;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
 
   &--tag {
     position: absolute;
@@ -67,7 +71,7 @@ export default {
   &--name {
     font-weight: 600;
     font-size: 18px;
-    margin: 8px auto;
+    margin: 0;
   }
 
   &--description {
@@ -81,30 +85,44 @@ export default {
     font-weight: 600;
     font-size: 18px;
     color: @yellow;
-    margin: 8px auto;
+    margin: 0;
+  }
+
+  .content{
+    height: 100%;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 10px;
   }
 
   @media @smartphones {
     width: 100%;
     height: fit-content;
     border: 1px solid @light-grey;
-    display: flex;
+    
+    flex-direction: row;
     margin: 10px 0;
-    padding: 5px 10px;
+    padding: 10px 20px;
 
     &--img {
-      height: 60px;
+      width: 86px;
       margin: 0 0 10px 0;
     }
 
     &--price {
       text-align: right;
-      margin: 0 auto;
+      margin: 5px 0 0 auto;
     }
 
     &--tag{
       position: static;
       width: fit-content;
+    }
+
+    .content{
+      flex-grow: 1;
     }
 
     .container{

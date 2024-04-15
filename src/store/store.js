@@ -5,16 +5,39 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    selectedCategory: ''
+    selectedCategory: '',
+    cartList: []
   },
   mutations: {
     ChangeCategory (state, id) {
         state.selectedCategory = id
+    },
+    addToCart(state, el){
+      state.cartList.push({...el, quantity: 1});
+    },
+    increaseQuantity(state, index){
+      ++state.cartList[index].quantity;
+    },
+    decreaseQuantity(state, index){
+      --state.cartList[index].quantity;
     }
   },
   actions: {
     ChangeCategory (context, id) {
       context.commit('ChangeCategory', id)
+    },
+    addToCart({state, commit}, el){
+     const cartItem = state.cartList.find( cartItem => cartItem.id === el.id)
+     const index = state.cartList.findIndex(cartItem => cartItem.id === el.id)
+     cartItem ? commit('increaseQuantity', index) : commit('addToCart', el)
+    },
+    increaseQuantity({state, commit}, id){
+     const index = state.cartList.findIndex(cartItem => cartItem.id === id)
+     commit('increaseQuantity', index)
+    },
+    decreaseQuantity({state, commit}, id){
+      const index = state.cartList.findIndex(cartItem => cartItem.id === id)
+     commit('decreaseQuantity', index)
     }
   }
 })

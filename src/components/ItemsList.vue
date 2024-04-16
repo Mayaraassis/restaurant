@@ -21,7 +21,9 @@ export default {
       isLoading: false,
     };
   },
-  created() {},
+  created() {
+    this.getItemsList()
+  },
   computed: {
     selectedCategory() {
         return this.$store.state.selectedCategory;

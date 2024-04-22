@@ -1,22 +1,44 @@
 <template>
   <div class="cart">
-    <router-link to="/" class="cart--go-back">←️ Voltar</router-link>
+    <router-link to="/" class="cart--go-back" v-if="!isDesktop()">←️ Voltar</router-link>
     <h2 class="cart--title">Seu pedido</h2>
+    <p v-if="!hasItems">Seu carrinho ainda está vazio</p>
     <CartItem v-for="item in cartList" :key="item.id" :item="item" />
+    <div class="cart--total" v-if="hasItems">
+      <span>Total: </span>
+      <span class="price">{{ getCartTotal | currency }}</span>
+    </div>
   </div>
 </template>
 
 <script>
 import CartItem from "@/components/CartItem.vue";
+import { mapGetters } from "vuex";
+import Mixin from "@/mixins/mixins.js";
 export default {
   name: "CartComponent",
   components: {
     CartItem,
   },
+  mixins: [Mixin],
+  filters: {
+    currency(value) {
+      return `R$ ${value.toLocaleString("pt-br", {
+        minimumFractionDigits: 2,
+      })}`;
+    },
+  },
   computed: {
+
+    ...mapGetters([
+      'getCartTotal'
+    ]),
     cartList() {
       return this.$store.state.cartList;
     },
+    hasItems(){
+      return this.cartList.length;
+    }
   },
 };
 </script>
@@ -39,6 +61,18 @@ export default {
   &--title {
     font-weight: 600;
     font-size: 24px;
+  }
+
+  &--total{
+    font-weight: 600;
+    font-size: 18px;
+    text-align: right;
+    margin-top: 30px;
+
+    .price{
+      color: @yellow;
+      padding-left: 10px ;
+    }
   }
 
   @media @smartphones {

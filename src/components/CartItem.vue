@@ -1,10 +1,6 @@
 <template>
   <div class="item">
-    <div class="item--quantity">
-        <button class="buttons" @click="decreaseQuantity(item.id)" :disabled="item.quantity == 0">-</button>
-        <span class="number">{{ item.quantity }}</span>
-        <button class="buttons" @click="increaseQuantity(item.id)">+</button>
-    </div>
+    <quantity-component :item="item" class="item--quantity" />
     <div class="item--img-container">
       <img class="item--img" :src="imagePath" />
     </div>
@@ -17,10 +13,13 @@
 </template>
 
 <script>
-
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex";
+import QuantityComponent from "./QuantityComponent.vue";
 export default {
   name: "CartItem",
+  components: {
+    QuantityComponent,
+  },
   props: {
     item: {},
   },
@@ -37,11 +36,8 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-        'increaseQuantity',
-        'decreaseQuantity'
-    ])
-  }
+    ...mapActions(["increaseQuantity", "decreaseQuantity"]),
+  },
 };
 </script>
 
@@ -51,26 +47,25 @@ export default {
   padding: 20px 0;
   border-bottom: 1px solid @light-grey;
 
-
-  &--quantity{
+  &--quantity {
     display: flex;
     align-items: center;
     padding-right: 40px;
 
-    .number{
-        font-weight: 500;
-        font-size: 18px;
-        color: @yellow;
-        width: 28px;
-        text-align: center;
+    .number {
+      font-weight: 500;
+      font-size: 18px;
+      color: @yellow;
+      width: 28px;
+      text-align: center;
     }
 
-    .buttons{
-        font-weight: 600;
-        font-size: 18px;
-        cursor: pointer;
-        background: none;
-        border: none;
+    .buttons {
+      font-weight: 600;
+      font-size: 18px;
+      cursor: pointer;
+      background: none;
+      border: none;
     }
   }
 
@@ -89,54 +84,53 @@ export default {
     margin: auto;
   }
 
-  &--name{
+  &--name {
     font-weight: 600;
     font-size: 18px;
     margin: 0;
   }
 
-  &--observation{
+  &--observation {
     font-weight: 500;
     font-size: 12px;
     color: @dark-grey;
     text-decoration: underline;
   }
 
-  &--price{
+  &--price {
     font-weight: 600;
     font-size: 18px;
     line-height: 27px;
     color: @yellow;
   }
 
-  .content{
+  .content {
     flex-grow: 1;
     padding: 0 20px;
   }
 
   @media @smartphones {
-
     flex-wrap: wrap;
 
-    &--img-container{
-        order: 1;
+    &--img-container {
+      order: 1;
     }
 
-    .content{
-        order: 2;
+    .content {
+      order: 2;
     }
 
-    &--quantity{
-        order: 3;
-        padding: 0;
-        width: 81px;
-        justify-content: center;
+    &--quantity {
+      order: 3;
+      padding: 0;
+      width: 81px;
+      justify-content: center;
     }
 
-    &--price{
-        order: 4;
-        padding: 0 20px;
-        margin: 5px 0;
+    &--price {
+      order: 4;
+      padding: 0 20px;
+      margin: 5px 0;
     }
   }
 }

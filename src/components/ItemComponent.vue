@@ -13,10 +13,14 @@
 </template>
 
 <script>
+import Mixin from "@/mixins/mixins.js";
+
 export default {
   name: "ItemComponent",
+  mixins: [Mixin],
   filters: {
     currency(value) {
+      if (!value) return;
       return `R$ ${value.toLocaleString("pt-br", {
         minimumFractionDigits: 2,
       })}`;
@@ -26,15 +30,20 @@ export default {
     item: {},
   },
   computed: {
-    imagePath(){
-      return require(`@/assets/images/${this.item.id}.png`)
-    }
+    imagePath() {
+      if (!this.item?.id) return;
+      return require(`@/assets/images/${this.item.id}.png`);
+    },
   },
   methods: {
-    addToCart(){
-      this.$store.dispatch('addToCart', this.item);
-    }
-  }
+    addToCart() {
+      if (this.isDesktop()) {
+        this.$store.dispatch("addToCart", this.item);
+        return;
+      }
+      this.$router.push({ name: "AddToCart", params: { id: this.item.id } });
+    },
+  },
 };
 </script>
 
@@ -88,7 +97,7 @@ export default {
     margin: 0;
   }
 
-  .content{
+  .content {
     height: 100%;
     max-height: 100%;
     display: flex;
@@ -101,7 +110,7 @@ export default {
     width: 100%;
     height: fit-content;
     border: 1px solid @light-grey;
-    
+
     flex-direction: row;
     margin: 10px 0;
     padding: 10px 20px;
@@ -116,21 +125,21 @@ export default {
       margin: 5px 0 0 auto;
     }
 
-    &--tag{
+    &--tag {
       position: static;
       width: fit-content;
     }
 
-    .content{
+    .content {
       flex-grow: 1;
     }
 
-    .container{
+    .container {
       display: flex;
       flex-direction: column-reverse;
       align-items: center;
       justify-content: center;
-      margin-right:10px;
+      margin-right: 10px;
     }
   }
 }

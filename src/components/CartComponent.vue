@@ -1,9 +1,13 @@
 <template>
   <div class="cart">
-    <router-link to="/" class="cart--go-back" v-if="!isDesktop()">←️ Voltar</router-link>
+    <router-link to="/" class="cart--go-back" v-if="!isDesktop()"
+      >←️ Voltar</router-link
+    >
     <h2 class="cart--title">Seu pedido</h2>
     <p v-if="!hasItems">Seu carrinho ainda está vazio</p>
-    <CartItem v-for="item in cartList" :key="item.id" :item="item" />
+    <transition-group name="list">
+      <CartItem v-for="item in cartList" :key="item.id" :item="item" />
+    </transition-group>
     <div class="cart--total" v-if="hasItems">
       <span>Total: </span>
       <span class="price">{{ getCartTotal | currency }}</span>
@@ -29,16 +33,13 @@ export default {
     },
   },
   computed: {
-
-    ...mapGetters([
-      'getCartTotal'
-    ]),
+    ...mapGetters(["getCartTotal"]),
     cartList() {
       return this.$store.state.cartList;
     },
-    hasItems(){
+    hasItems() {
       return this.cartList.length;
-    }
+    },
   },
 };
 </script>
@@ -50,7 +51,7 @@ export default {
   min-width: 643px;
   padding: 50px 20px;
 
-  &--go-back{
+  &--go-back {
     font-weight: 600;
     font-size: 18px;
     padding: 10px;
@@ -63,18 +64,26 @@ export default {
     font-size: 24px;
   }
 
-  &--total{
+  &--total {
     font-weight: 600;
     font-size: 18px;
     text-align: right;
     margin-top: 30px;
 
-    .price{
+    .price {
       color: @yellow;
-      padding-left: 10px ;
+      padding-left: 10px;
     }
   }
-
+  .list-enter-active,
+  .list-leave-active {
+    transition: all 1s;
+  }
+  .list-enter,
+  .list-leave-to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
   @media @smartphones {
     width: 100%;
     min-width: unset;

@@ -97,5 +97,13 @@ export default {
     border-radius: 8px;
     border: 1px solid @light-grey;
   }
+
+  button {
+    width: calc(100% - 40px);
+    position: fixed;
+    bottom: 10px;
+    left: 20px;
+    right: 20px;
+  }
 }
 </style>

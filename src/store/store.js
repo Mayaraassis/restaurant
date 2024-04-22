@@ -1,50 +1,57 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
-    selectedCategory: '',
-    cartList: []
+    selectedCategory: "",
+    cartList: [],
   },
   mutations: {
-    ChangeCategory (state, id) {
-        state.selectedCategory = id
+    ChangeCategory(state, id) {
+      state.selectedCategory = id;
     },
-    addToCart(state, el){
-      state.cartList.push({...el, quantity: 1});
+    addToCart(state, el) {
+      state.cartList.push({ ...el, quantity: el?.quantity || 1 });
     },
-    increaseQuantity(state, index){
-      ++state.cartList[index].quantity;
+    increaseQuantity(state, { index, quantity }) {
+      state.cartList[index].quantity += quantity;
     },
-    decreaseQuantity(state, index){
+    decreaseQuantity(state, index) {
       --state.cartList[index].quantity;
-    }
+    },
   },
   actions: {
-    ChangeCategory (context, id) {
-      context.commit('ChangeCategory', id)
+    ChangeCategory(context, id) {
+      context.commit("ChangeCategory", id);
     },
-    addToCart({state, commit}, el){
-     const cartItem = state.cartList.find( cartItem => cartItem.id === el.id)
-     const index = state.cartList.findIndex(cartItem => cartItem.id === el.id)
-     cartItem ? commit('increaseQuantity', index) : commit('addToCart', el)
+    addToCart({ state, commit }, el) {
+      const cartItem = state.cartList.find((cartItem) => cartItem.id === el.id);
+      if (!cartItem) {
+        commit("addToCart", el);
+        return;
+      }
+
+      const index = state.cartList.findIndex(
+        (cartItem) => cartItem.id === el.id
+      );
+      commit("increaseQuantity", { index: index, quantity: el?.quantity || 1 });
     },
-    increaseQuantity({state, commit}, id){
-     const index = state.cartList.findIndex(cartItem => cartItem.id === id)
-     commit('increaseQuantity', index)
+    increaseQuantity({ state, commit }, id) {
+      const index = state.cartList.findIndex((cartItem) => cartItem.id === id);
+      commit("increaseQuantity", index);
     },
-    decreaseQuantity({state, commit}, id){
-      const index = state.cartList.findIndex(cartItem => cartItem.id === id)
-     commit('decreaseQuantity', index)
-    }
+    decreaseQuantity({ state, commit }, id) {
+      const index = state.cartList.findIndex((cartItem) => cartItem.id === id);
+      commit("decreaseQuantity", index);
+    },
   },
   getters: {
-    getCartTotal(state){
-      return state.cartList.reduce( (acc, item) => {
-        return acc + (item.price * item.quantity)
-      }, 0)
-    }
-  }
-})
+    getCartTotal(state) {
+      return state.cartList.reduce((acc, item) => {
+        return acc + item.price * item.quantity;
+      }, 0);
+    },
+  },
+});

@@ -9,14 +9,25 @@
     </button>
     <span class="number">{{ item.quantity }}</span>
     <button class="buttons" @click="onIncreaseButtonClick">+</button>
+    <modal-component :show="showModal">
+      <div class="modal-content">
+        <h2>Deseja remover esse item do carrinho?</h2>
+        <button class="secondary-button">Cancelar</button>
+        <button class="primary-button">Sim, remover</button>
+      </div>
+    </modal-component>
   </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
+import ModalComponent from "@/components/ModalComponent.vue";
 
 export default {
   name: "QuantityComponent",
+  components: {
+    ModalComponent,
+  },
   props: {
     item: {},
     useStore: {
@@ -24,12 +35,18 @@ export default {
       default: true,
     },
   },
+  data() {
+    return {
+      showModal: false,
+    };
+  },
   methods: {
     ...mapActions(["increaseQuantity", "decreaseQuantity"]),
 
     onDecreaseButtonClick() {
       if (this.useStore) {
         this.decreaseQuantity(this.item.id);
+        if (!this.item.quantity) this.showModal = true;
         return;
       }
       // eslint-disable-next-line
@@ -68,6 +85,14 @@ export default {
     cursor: pointer;
     background: none;
     border: none;
+  }
+
+  .modal-content {
+    text-align: center;
+    button {
+      margin-left: 10px;
+      margin-top: 20px;
+    }
   }
 }
 </style>
